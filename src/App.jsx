@@ -16,7 +16,7 @@ function App() {
       <Route
         path="/home"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={["customer", "admin"]}>
             <Home />
           </ProtectedRoute>
         }
@@ -24,7 +24,7 @@ function App() {
       <Route
         path="/join/:placeId"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={["customer", "admin"]}>
             <JoinQueue />
           </ProtectedRoute>
         }
@@ -32,7 +32,7 @@ function App() {
       <Route
         path="/admin"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={["admin"]} redirectTo="/home">
             <AdminDashboard />
           </ProtectedRoute>
         }
@@ -40,7 +40,7 @@ function App() {
       <Route
         path="/analytics"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute allowedRoles={["admin"]} redirectTo="/home">
             <AnalyticsDashboard />
           </ProtectedRoute>
         }

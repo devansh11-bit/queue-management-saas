@@ -175,6 +175,8 @@ export async function createQueue(nameOrQueueData, type = "Queue") {
     estimatedWait: 0,
     nextToken: 1,
     currentUserId: "",
+    createdBy: auth.currentUser?.uid || "",
+    createdByEmail: auth.currentUser?.email || "",
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp()
   });
@@ -203,6 +205,8 @@ export async function createSampleQueue(place) {
     estimatedWait: 0,
     nextToken: 1,
     currentUserId: "",
+    createdBy: "sample",
+    createdByEmail: "",
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp()
   });

@@ -78,7 +78,19 @@ function AdminDashboard() {
   }, [queues]);
 
   const queueCards = useMemo(() => {
-    return queues.map((queueItem) => {
+    const visibleQueues = queues.filter((queueItem) => {
+      if (!auth.currentUser) {
+        return false;
+      }
+
+      if (!queueItem.createdBy) {
+        return true;
+      }
+
+      return queueItem.createdBy === auth.currentUser.uid;
+    });
+
+    return visibleQueues.map((queueItem) => {
       const users = usersByQueue[queueItem.id] || [];
       const waitingUsers = users.filter((user) => user.status === "waiting");
       const completedUsers = users.filter((user) => {

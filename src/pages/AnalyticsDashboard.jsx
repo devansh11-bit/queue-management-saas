@@ -21,6 +21,7 @@ import {
   YAxis
 } from "recharts";
 import { auth, db } from "../firebase";
+import { useAuth } from "../contexts/AuthContext.jsx";
 
 const pieColors = ["#333", "#777", "#d8d8d8"];
 
@@ -42,6 +43,7 @@ function getHourLabel(hour) {
 
 function AnalyticsDashboard() {
   const navigate = useNavigate();
+  const { role } = useAuth();
   const [queues, setQueues] = useState([]);
   const [members, setMembers] = useState([]);
   const [error, setError] = useState("");
@@ -157,12 +159,11 @@ function AnalyticsDashboard() {
           </div>
 
           <div className="flex items-center gap-3">
-            <Link
-              to="/admin"
-              className="btn-secondary"
-            >
-              Admin
-            </Link>
+            {role === "admin" && (
+              <Link to="/admin" className="btn-secondary">
+                Admin
+              </Link>
+            )}
             <button
               onClick={handleLogout}
               className="btn-secondary"

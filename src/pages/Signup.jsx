@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
+import { createUserProfile } from "../services/userService";
+import { getPostAuthRedirect } from "../utils/authRouting.js";
 
 function getAuthErrorMessage(errorCode) {
   if (errorCode === "auth/email-already-in-use") {
@@ -25,6 +27,7 @@ function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [selectedRole, setSelectedRole] = useState("customer");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -40,13 +43,17 @@ function Signup() {
     setLoading(true);
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      navigate(location.state?.from || "/home");
+      const credential = await createUserWithEmailAndPassword(auth, email, password);
+      await createUserProfile(credential.user, selectedRole);
+      navigate(
+        getPostAuthRedirect({
+          role: selectedRole,
+          fromPath: location.state?.from
+        })
+      );
     } catch (error) {
-  console.log("ERROR:", error.code, error.message);
-  setError(error.message);
-}
-finally {
+      setError(getAuthErrorMessage(error.code));
+    } finally {
       setLoading(false);
     }
   }
@@ -68,6 +75,32 @@ finally {
         )}
 
         <form onSubmit={handleSignup} className="space-y-4">
+          <div>
+            <p className="mb-2 text-sm font-medium text-[#333]">Continue as</p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <button
+                type="button"
+                onClick={() => setSelectedRole("customer")}
+                disabled={loading}
+                className={
+                  selectedRole === "customer" ? "btn-primary" : "btn-secondary"
+                }
+              >
+                Customer
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedRole("admin")}
+                disabled={loading}
+                className={
+                  selectedRole === "admin" ? "btn-primary" : "btn-secondary"
+                }
+              >
+                Admin
+              </button>
+            </div>
+          </div>
+
           <div>
             <label className="mb-1 block text-sm font-medium text-[#333]">
               Email
