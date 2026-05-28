@@ -1,8 +1,10 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import CustomerLayout from "./components/CustomerLayout.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard.jsx";
 import Home from "./pages/Home.jsx";
+import Explore from "./pages/Explore.jsx";
 import JoinQueue from "./pages/JoinQueue.jsx";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
@@ -17,7 +19,19 @@ function App() {
         path="/home"
         element={
           <ProtectedRoute allowedRoles={["customer", "admin"]}>
-            <Home />
+            <CustomerLayout>
+              <Home />
+            </CustomerLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/explore"
+        element={
+          <ProtectedRoute allowedRoles={["customer", "admin"]}>
+            <CustomerLayout>
+              <Explore />
+            </CustomerLayout>
           </ProtectedRoute>
         }
       />

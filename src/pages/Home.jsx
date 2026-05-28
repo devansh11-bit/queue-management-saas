@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { QRCodeCanvas } from "qrcode.react";
-import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import places from "../data/places";
@@ -163,36 +162,15 @@ function Home() {
     }
   }
 
-  async function handleLogout() {
-    await signOut(auth);
-    navigate("/login");
-  }
-
   return (
-    <div className="app-shell">
-      <header className="app-header">
-        <div className="app-container flex items-center justify-between py-5">
-          <div>
-            <h1 className="page-title">Queue Management</h1>
-            <p className="muted-text">
-              Live tokens, people ahead, and estimated wait time.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            {role === "admin" && (
-              <Link to="/admin" className="btn-secondary">
-                Admin
-              </Link>
-            )}
-            <button onClick={handleLogout} className="btn-secondary">
-              Logout
-            </button>
-          </div>
+    <div>
+      <div className="app-container py-5 md:py-8">
+        <div className="mb-6 md:mb-8">
+          <h1 className="page-title text-2xl">Queue Management</h1>
+          <p className="muted-text mt-1">
+            Live tokens, people ahead, and estimated wait time.
+          </p>
         </div>
-      </header>
-
-      <main className="app-container py-8">
         {isCustomer ? (
           <div className="mb-6">
             <h2 className="section-title">My queues</h2>
@@ -580,7 +558,7 @@ function Home() {
             No queues found.
           </div>
         )}
-      </main>
+      </div>
     </div>
   );
 }
